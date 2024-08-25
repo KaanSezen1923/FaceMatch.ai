@@ -4,6 +4,7 @@ import cv2
 import pickle
 import firebase_admin
 from firebase_admin import credentials, db
+import requests
 
 # Firebase'e bağlanma
 cred = credentials.Certificate("actor-and-actress-firebase-adminsdk-8skz5-a9185b831c.json")
@@ -12,6 +13,10 @@ firebase_admin.initialize_app(cred, {
 })
 
 folder_path = "Data"
+
+# TMDB API bilgileri
+tmdb_api_key = "YOUR API KEY HERE"
+tmdb_base_url = "https://api.themoviedb.org/3"
 
 # Klasördeki dosyaları listeleme
 try:
@@ -77,11 +82,39 @@ except Exception as e:
 # Realtime Database'e kaydetme
 ref = db.reference("face_encodings")
 
+def get_actor_info(name):
+    search_url = f"{tmdb_base_url}/search/person"
+    params = {
+        "api_key": tmdb_api_key,
+        "query": name
+    }
+    response = requests.get(search_url, params=params)
+    if response.status_code == 200:
+        results = response.json().get('results')
+        if results:
+            actor_id = results[0]['id']
+            details_url = f"{tmdb_base_url}/person/{actor_id}"
+            details_params = {"api_key": tmdb_api_key}
+            details_response = requests.get(details_url, params=details_params)
+            if details_response.status_code == 200:
+                return details_response.json()
+    return None
+
 for i in range(len(encode_list_known)):
     face_data = {
         "name": names[i],
         "encoding": encode_list_known[i].tolist()  # Numpy array'i JSON uyumlu yapmak için listeye çeviriyoruz
     }
+    
+    actor_info = get_actor_info(names[i])
+    if actor_info:
+        face_data["actor_info"] = {
+            "biography": actor_info.get("biography", ""),
+            "birthday": actor_info.get("birthday", ""),
+            "place_of_birth": actor_info.get("place_of_birth", ""),
+            "known_for": [movie["title"] for movie in actor_info.get("known_for", [])]
+        }
+    
     ref.child(names[i]).set(face_data)
     print(f"Saved {names[i]} to Firebase Realtime Database")
 
