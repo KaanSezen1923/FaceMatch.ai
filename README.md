@@ -1,6 +1,3 @@
-Here's a `README.md` file for your project:
-
----
 
 # FaceMatch.ai
 
@@ -26,59 +23,62 @@ FaceMatch.ai is a Streamlit-based web application designed to recognize actors' 
 └── README.md               # Project README file
 ```
 
-## Installation
+## Deployment
 
-1. **Clone the Repository:**
+### 1. Prepare Your Environment
+
+- **Clone the Repository:**
 
    ```bash
    git clone https://github.com/your-username/FaceMatch.ai.git
-   cd FaceSearcher.ai
+   cd FaceMatch.ai
    ```
 
-2. **Install Dependencies:**
+- **Create a Virtual Environment (optional but recommended):**
 
-   You can install the required dependencies using pip:
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+   ```
+
+- **Install Dependencies:**
 
    ```bash
    pip install -r requirements.txt
    ```
 
-3. **Set Up Firebase:**
+### 2. Set Up Firebase
 
-   - Place your Firebase Admin SDK JSON credentials file (`actor-and-actress-firebase-adminsdk.json`) in the root directory.
-   - Make sure to update the Firebase Realtime Database URL in the script if necessary.
+- Place your Firebase Admin SDK JSON credentials file (`actor-and-actress-firebase-adminsdk.json`) in the root directory.
+- Ensure the Firebase Realtime Database URL in the script matches your Firebase project settings.
 
-4. **TMDB API Key:**
+### 3. Configure TMDB API
 
-   - Obtain a TMDB API key from [The Movie Database](https://www.themoviedb.org/).
-   - Replace `tmdb_api_key` in the `face_encoder.py` script with your TMDB API key.
+- Obtain a TMDB API key from [The Movie Database](https://www.themoviedb.org/).
+- Replace `tmdb_api_key` in the `face_encoder.py` script with your TMDB API key.
 
-## Usage
+### 4. Encode Faces and Store in Firebase
 
-### 1. Encoding Faces and Storing in Firebase
+Run the `face_encoder.py` script to encode faces from images in the `Data` folder and store the encodings in Firebase Realtime Database:
 
-   Run the `face_encoder.py` script to encode faces from the images in the `Data` folder and store the encodings in Firebase Realtime Database:
+```bash
+python face_encoder.py
+```
 
-   ```bash
-   python face_encoder.py
-   ```
+### 5. Run the Streamlit Application
 
-   This script will process all images in the `Data` folder, encode the faces, and save the encodings along with the actor's information in Firebase.
+Start the Streamlit application:
 
-### 2. Running the Streamlit Application
+```bash
+streamlit run main.py
+```
 
-   After encoding the faces, you can run the main application using Streamlit:
-
-   ```bash
-   streamlit run main.py
-   ```
-
-   This will open the application in your default web browser. The application will start capturing video from your webcam (or the specified video file) and display recognized faces along with their information on the sidebar.
+This will open the application in your default web browser. The application will capture video from your webcam (or the specified video file) and display recognized faces along with their information.
 
 ## Configuration
 
-- **Video Input:** You can change the video source in the `main.py` file by modifying the `cv2.VideoCapture()` function. For example, you can switch between a webcam and a video file.
-- **Threshold for Face Recognition:** The face recognition threshold is set to `0.65` by default. You can adjust this threshold in the main loop to make the recognition more or less strict.
+- **Video Input:** Modify the `cv2.VideoCapture()` function in `main.py` to switch between a webcam and a video file.
+- **Recognition Threshold:** Adjust the face recognition threshold in the main loop of `main.py` to fine-tune recognition accuracy.
 
 ## Dependencies
 
@@ -94,10 +94,10 @@ FaceMatch.ai is a Streamlit-based web application designed to recognize actors' 
 
 ## Future Improvements
 
-- Add support for recognizing multiple faces simultaneously.
-- Improve the user interface with more detailed actor information.
-- Implement caching for TMDB API requests to reduce the number of API calls.
-- Expand the application to handle larger databases of actors.
+- Support for recognizing multiple faces simultaneously.
+- Enhanced user interface with more detailed actor information.
+- Caching TMDB API requests to reduce API call frequency.
+- Expand the application to handle larger actor databases.
 
 ## Contributing
 
@@ -109,4 +109,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-This `README.md` should provide a clear overview of your project, guiding users through installation, usage, and configuration. Make sure to adjust the repository URL and other specific details as needed.
+Make sure to adjust the repository URL and other specific details as needed.
