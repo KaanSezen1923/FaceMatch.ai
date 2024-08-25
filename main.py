@@ -8,7 +8,7 @@ from firebase_admin import credentials, db
 import cvzone
 
 # Page configuration
-st.set_page_config(page_title="FaceSearcher.ai", layout="centered")
+st.set_page_config(page_title="FaceMatch.ai", layout="centered")
 
 # Firebase initialization
 cred = credentials.Certificate("actor-and-actress-firebase-adminsdk-8skz5-a9185b831c.json")
@@ -52,7 +52,7 @@ def display_actor_info(actor_info):
         st.warning("No additional information found for this actor in Firebase.")
 
 # Application title
-st.title("FaceSearcher.ai")
+st.title("FaceMatch.ai")
 
 # Load face encodings
 st.info("Loading encoded face data...")
@@ -60,7 +60,7 @@ encode_list_known, names = load_encoded_faces("EncodeFile.p")
 st.success("Encoding file loaded successfully.")
 
 # Initialize webcam video capture
-cap = cv2.VideoCapture("Yüzüklerin Efendisi Yüzük Kardeşliği _ Kardeşlik Kuruluyor _ HD İzle.mp4")
+cap = cv2.VideoCapture(0)
 stframe = st.empty()
 
 actor_info_container = st.empty()
